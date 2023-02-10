@@ -11,7 +11,7 @@ const projectSchema = new mongoose.Schema({
         required :true,
         trim: true
     },
-    dataExpire: {
+    dateExpire: {
         type: Date,
         default: Date.now()
     },
@@ -20,7 +20,7 @@ const projectSchema = new mongoose.Schema({
         required :true,
         trim: true
     },
-    createBy: {
+    createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },

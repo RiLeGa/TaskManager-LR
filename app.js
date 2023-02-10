@@ -6,23 +6,34 @@ const logger = require('morgan');
 const connectDB = require('./database/config')
 
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const app = express();
+const cors = require('cors');
+const checkToken = require('./middlewares/checkToken');
+const whiteList = [process.env.URL_FRONTEND];
+const corsOptions = {
+  origin : function (origin, cb) {
+    if(whiteList.includes(origin)){
+      cb(null, true)
+    }else{
+      cb(new Error('Error de Cors'))
+    }
+  }
+}
+
 
 connectDB()
-createError()
-
-const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors())
 
 /* Rutas */
 app
-.use('/api/auth',require('./routes/auth'))
-app
-.use('/api/users',require('./routes/users'))
+  .use('/api/auth',require('./routes/auth'))
+  .use('/api/users',require('./routes/users'))
+  .use('/api/projects', checkToken, require('./routes/project'))
+  .use('/api/tasks',require('./routes/tasks'))
 
 /* app.use('/', indexRouter);
 app.use('/users', usersRouter); */
